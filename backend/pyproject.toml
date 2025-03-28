@@ -1,0 +1,16 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.12",
+    "httpx>=0.28.1",
+    "kombu>=5.5.1",
+    "python-dotenv>=1.1.0",
+    "python-multipart>=0.0.20",
+    "redis>=5.2.1",
+    "requests>=2.32.3",
+    "uvicorn>=0.34.0",
+]

@@ -4,10 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from integrations.airtable import authorize_airtable, get_items_airtable, oauth2callback_airtable, get_airtable_credentials
 from integrations.notion import authorize_notion, get_items_notion, oauth2callback_notion, get_notion_credentials
 from integrations.hubspot import authorize_hubspot, get_hubspot_credentials, get_items_hubspot, oauth2callback_hubspot
+from dotenv import load_dotenv
+import os
+
+load_dotenv() 
+
+ORIGINS = list(map(lambda x: x.strip(), os.getenv('ORIGINS', '').split(',')))
 
 app = FastAPI()
 
-origins = [
+origins = [ 
+    *ORIGINS,
     "http://localhost:3000",  # React app address
 ]
 
@@ -23,6 +30,9 @@ app.add_middleware(
 def read_root():
     return {'Ping': 'Pong'}
 
+@app.get('/health')
+def health_check(): 
+    return {'status': 'healthy'}
 
 # Airtable
 @app.post('/integrations/airtable/authorize')
@@ -72,6 +82,6 @@ async def oauth2callback_hubspot_integration(request: Request):
 async def get_hubspot_credentials_integration(user_id: str = Form(...), org_id: str = Form(...)):
     return await get_hubspot_credentials(user_id, org_id)
 
-@app.post('/integrations/hubspot/get_hubspot_items')
-async def load_slack_data_integration(credentials: str = Form(...)):
+@app.post('/integrations/hubspot/load')
+async def load_hubspot_data_integration(credentials: str = Form(...)):
     return await get_items_hubspot(credentials)
