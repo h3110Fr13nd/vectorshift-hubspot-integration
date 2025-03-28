@@ -11,30 +11,61 @@ This guide will help you set up and run the VectorShift Integration Assessment p
 
 ## Configuration Setup
 
-1. Create root level environment file:
+1. Create and configure the root level environment file:
    ```bash
    cp .env.example .env
    ```
+   Configure in root `.env`:
+   ```bash
+   FRONTEND_ENV=development    # Environment for frontend (development/production)
+   FRONTEND_PORT=3000         # Port for frontend service
+   BACKEND_PORT=8000         # Port for backend service
+   REDIS_PORT=6379          # Port for Redis service
+   ```
 
-2. Create backend environment file:
+2. Create and configure the frontend environment file:
+   ```bash
+   cd frontend
+   cp .env.example .env
+   ```
+   Configure in frontend `.env`:
+   ```bash
+   REACT_APP_API_URL=http://localhost:8000  # Backend API URL
+   ```
+
+3. Create and configure the backend environment file:
    ```bash
    cd backend
    cp .env.example .env
    ```
+   Configure in backend `.env`:
+   ```bash
+   # Redis Configuration
+   REDIS_HOST=redis          # Use 'redis' for docker-compose, 'localhost' for local setup
+   REDIS_PORT=6379          # Should match root REDIS_PORT
 
-3. Configure your environment files:
+   # OAuth Credentials
+   AIRTABLE_CLIENT_ID=your_client_id
+   AIRTABLE_CLIENT_SECRET=your_client_secret
+   
+   NOTION_CLIENT_ID=your_client_id
+   NOTION_CLIENT_SECRET=your_client_secret
+   
+   HUBSPOT_CLIENT_ID=your_client_id
+   HUBSPOT_CLIENT_SECRET=your_client_secret
 
-   In the root `.env`:
-   - Set `FRONTEND_PORT` (default: 3000)
-   - Set `BACKEND_PORT` (default: 8000)
-   - Set `REDIS_PORT` (default: 6379)
+   # OAuth Redirect URIs (adjust ports if changed in root .env)
+   AIRTABLE_REDIRECT_URI=http://localhost:8000/oauth/airtable/callback
+   NOTION_REDIRECT_URI=http://localhost:8000/oauth/notion/callback
+   HUBSPOT_REDIRECT_URI=http://localhost:8000/oauth/hubspot/callback
+   ```
 
-   In the backend `.env`:
-   - Set `AIRTABLE_CLIENT_ID` and `AIRTABLE_CLIENT_SECRET`
-   - Set `NOTION_CLIENT_ID` and `NOTION_CLIENT_SECRET`
-   - Set `HUBSPOT_CLIENT_ID` and `HUBSPOT_CLIENT_SECRET`
-   - Verify redirect URIs match your setup
-   - Set `REDIS_HOST` (use 'redis' for docker-compose, 'localhost' for local setup)
+Important Notes:
+- For Docker setup, use `REDIS_HOST=redis`
+- For local setup, use `REDIS_HOST=localhost`
+- Ensure all redirect URIs match your OAuth provider settings
+- Keep sensitive credentials secure and never commit .env files to version control
+- When changing ports in root `.env`, update corresponding service configurations and redirect URIs
 
 ## Option 1: Running with Docker Compose
 
@@ -108,8 +139,6 @@ This guide will help you set up and run the VectorShift Integration Assessment p
 3. Test Redis connection:
    - Redis should be running on port 6379
    - The backend should be able to connect to Redis for session management
-
-> Ports used are default ports. If you change them in the .env files, ensure to update the redirect URIs in the OAuth provider settings.
 
 ## Troubleshooting
 
@@ -282,4 +311,4 @@ def apply_transform(value, transform=None):
 
 4. **Testing**: Test your field mappings with sample API responses before deployment.
 
-This architecture ensures that adding new HubSpot API endpoints is a matter of configuration rather than code changes, making the system highly maintainable and extensible.
+5. **Extensibility**: This architecture ensures that adding new HubSpot API endpoints is a matter of configuration rather than code changes, making the system highly maintainable and extensible.
