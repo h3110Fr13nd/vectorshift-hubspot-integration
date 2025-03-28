@@ -33,7 +33,7 @@ export const DataForm = ({ integrationType, credentials, loadedData: initialData
         try {
             const formData = new FormData();
             formData.append('credentials', JSON.stringify(credentials));
-            const response = await axios.post(`http://localhost:8000/integrations/${endpoint}/load`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/integrations/${endpoint}/load`, formData);
             const data = response.data;
             setLoadedData(data);
             if (setParentLoadedData) {

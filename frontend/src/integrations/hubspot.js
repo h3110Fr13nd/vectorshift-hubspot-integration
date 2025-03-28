@@ -19,7 +19,7 @@ export const HubSpotIntegration = ({ user, org, integrationParams, setIntegratio
             const formData = new FormData();
             formData.append('user_id', user);
             formData.append('org_id', org);
-            const response = await axios.post(`http://localhost:8000/integrations/hubspot/authorize`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/integrations/hubspot/authorize`, formData);
             const authURL = response?.data;
             console.log(authURL);
             const newWindow = window.open(authURL, 'HubSpot Authorization', 'width=600, height=600');
@@ -43,7 +43,7 @@ export const HubSpotIntegration = ({ user, org, integrationParams, setIntegratio
             const formData = new FormData();
             formData.append('user_id', user);
             formData.append('org_id', org);
-            const response = await axios.post(`http://localhost:8000/integrations/hubspot/credentials`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/integrations/hubspot/credentials`, formData);
             const credentials = response.data; 
             if (credentials) {
                 setIsConnecting(false);

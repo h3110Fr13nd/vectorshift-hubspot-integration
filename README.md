@@ -45,7 +45,7 @@ This guide will help you set up and run the VectorShift Integration Assessment p
 
 2. Access the application:
    - Frontend: http://localhost:80 (or your configured FRONTEND_PORT)
-   - Backend: http://localhost:8000 (or your configured BACKEND_PORT)
+   - Backend: ${process.env.REACT_APP_API_URL} (or your configured BACKEND_PORT)
    - Redis: localhost:6379 (or your configured REDIS_PORT)
 
 ## Option 2: Running Locally
@@ -102,12 +102,14 @@ This guide will help you set up and run the VectorShift Integration Assessment p
    - You should see the integration selection interface
 
 2. Check if the backend is running:
-   - Open http://localhost:8000/health
+   - Open ${process.env.REACT_APP_API_URL}/health
    - You should see `{"status": "healthy"}`
 
 3. Test Redis connection:
    - Redis should be running on port 6379
    - The backend should be able to connect to Redis for session management
+
+> Ports used are default ports. If you change them in the .env files, ensure to update the redirect URIs in the OAuth provider settings.
 
 ## Troubleshooting
 
